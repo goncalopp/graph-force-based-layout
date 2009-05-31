@@ -8,7 +8,8 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms
-  { you can add units after this }, Unit1, mypointUnit;
+  { you can add units after this }, Unit1, mypointUnit, 
+graphicgraph_unit, graph_unit;
 
 begin
   Application.Initialize;

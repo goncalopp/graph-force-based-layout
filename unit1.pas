@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, mypointunit;
+  ExtCtrls, StdCtrls, graphicgraph_unit, mypointUnit;
 
 type
 
@@ -33,7 +33,7 @@ type
 
 var
   Form1: TForm1; 
-  points: array of mypoint;
+  thegraph: graphicgraph;
   draggin: integer;
 
 implementation
@@ -41,62 +41,17 @@ implementation
 { TForm1 }
 
 
-procedure draw(size: integer);
-var i:integer; p: mypoint;
-begin
-Form1.img.canvas.Clear;
-for i:=0 to length(points)-1 do
-    begin
-    p:=points[i];
-    Form1.img.canvas.Ellipse(trunc(p.x-size), trunc(p.y-size), trunc(p.x+size), trunc(p.y+size));
-    Form1.img.canvas.line(trunc(p.x), trunc(p.y), trunc(p.x+5*p.vx), trunc(p.y+5*p.vy));
-    end;
-end;
 
-procedure simulation_step();
-var i,j:integer; p1,p2: mypoint;
-begin
-Form1.img.canvas.Clear;
-for i:=0 to length(points)-1 do
-    begin
-    p1:=points[i];
-    //p1.vx:=0;
-    //p1.vy:=0;
-
-
-    for j:=0 to length(points)-1 do
-        begin
-        p2:=points[j];
-        if p1<>p2 then
-           begin
-           p1.vx:=p1.vx+ p1.attractionVector(p2,100,1.01).x;
-           p1.vy:=p1.vy+ p1.attractionVector(p2,100,1.01).y;
-
-           end;
-        end;
-    p1.vx:=p1.vx/(length(points)-1 );
-    p1.vy:=p1.vy/(length(points)-1 );
-    end;
-
-for i:=0 to length(points)-1 do
-    begin
-    p1:=points[i];
-    p1.x:=p1.x+p1.vx;
-    p1.y:=p1.y+p1.vy;
-    end;
-
-end;
 
 
 
 procedure TForm1.Button1Click(Sender: TObject);
 var i: integer;
 begin
- setlength(points, 20);
+thegraph:=graphicgraph.create(false);
  for i:=0 to 19 do
-     points[i]:=mypoint.create(random()*512, random()*512);
-     draw(4);
-
+     thegraph.addvertex(random()*512, random()*512);
+ thegraph.draw(Form1.canvas, 4);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -105,8 +60,8 @@ begin
 
 for i:=0 to 9999 do
     begin
-    simulation_step();
-    draw(4);
+    thegraph.simulation_step();
+    thegraph.draw(Form1.canvas, 4);
     application.processmessages();
     sleep(0);
     //if (i mod 1000 = 0)  then
@@ -121,8 +76,8 @@ procedure TForm1.imgMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var i: integer;
 begin
-for i:=0 to length(points)-1 do
-    if points[i].distance(mypoint.create(X,Y))<5 then
+for i:=0 to length(thegraph.points)-1 do
+    if thegraph.points[i].distance(mypoint.create(X,Y))<5 then
        draggin:=i;
 end;
 
@@ -131,8 +86,8 @@ procedure TForm1.imgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
 begin
   if draggin>0 then
      begin
-     points[draggin].x :=x;
-     points[draggin].y :=y;
+     thegraph.points[draggin].x :=x;
+     thegraph.points[draggin].y :=y;
      end;
 end;
 

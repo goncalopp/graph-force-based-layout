@@ -30,7 +30,7 @@ begin
 x:=0; y:=0; vx:=0; vy:=0;
 end;
 
-constructor mypoint.create(x0: double; y0: double);
+constructor mypoint.create(x0, y0: double);
 begin
 x:=x0; y:=y0; vx:=0; vy:=0;
 end;
