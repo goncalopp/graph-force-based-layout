@@ -14,6 +14,8 @@ type
         procedure addvertex();
         procedure addvertex(x0,y0: double);
         procedure draw(thecanvas: TCanvas; vertexsize: integer);
+        procedure drawVertex(thecanvas: TCanvas; vertexsize: integer; vertexindex: integer);
+
         procedure simulation_step();
         end;
 
@@ -48,12 +50,18 @@ begin
 thecanvas.Clear;
 for i:=0 to length(points)-1 do
     begin
-    p:=points[i];
-    thecanvas.Ellipse(trunc(p.x-vertexsize), trunc(p.y-vertexsize), trunc(p.x+vertexsize), trunc(p.y+vertexsize));
+    drawVertex(thecanvas, vertexsize, i);
+
     thecanvas.line(trunc(p.x), trunc(p.y), trunc(p.x+5*p.vx), trunc(p.y+5*p.vy));
     end;
 end;
 
+procedure graphicgraph.drawVertex(thecanvas: TCanvas; vertexsize: integer; vertexindex: integer);
+var p: mypoint;
+begin
+p:=points[vertexindex];
+thecanvas.Ellipse(trunc(p.x-vertexsize), trunc(p.y-vertexsize), trunc(p.x+vertexsize), trunc(p.y+vertexsize));
+end;
 
 
 procedure graphicgraph.simulation_step();
@@ -62,9 +70,6 @@ begin
 for i:=0 to length(points)-1 do
     begin
     p1:=points[i];
-    //p1.vx:=0;
-    //p1.vy:=0;
-
 
     for j:=0 to length(points)-1 do
         begin
@@ -73,7 +78,6 @@ for i:=0 to length(points)-1 do
            begin
            p1.vx:=p1.vx+ p1.attractionVector(p2,100,1.01).x;
            p1.vy:=p1.vy+ p1.attractionVector(p2,100,1.01).y;
-
            end;
         end;
     p1.vx:=p1.vx/(length(points)-1 );
