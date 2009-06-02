@@ -1,5 +1,5 @@
 object Form1: TForm1
-  Left = 287
+  Left = 289
   Height = 526
   Top = 237
   Width = 806
@@ -13,9 +13,6 @@ object Form1: TForm1
     Height = 512
     Top = 8
     Width = 512
-    OnMouseDown = imgMouseDown
-    OnMouseMove = imgMouseMove
-    OnMouseUp = imgMouseUp
   end
   object Button1: TButton
     Left = 536

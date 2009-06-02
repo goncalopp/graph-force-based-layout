@@ -20,11 +20,7 @@ type
     img: TImage;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure imgMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure imgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+
   private
     { private declarations }
   public
@@ -40,17 +36,19 @@ implementation
 
 { TForm1 }
 
-
-
-
-
-
 procedure TForm1.Button1Click(Sender: TObject);
 var i: integer;
 begin
 thegraph:=graphicgraph.create(false);
- for i:=0 to 19 do
+ for i:=0 to 10 do
      thegraph.addvertex(random()*512, random()*512);
+ thegraph.addedge(1,2);
+ thegraph.addedge(1,3);
+ thegraph.addedge(1,4);
+ thegraph.addedge(4,5);
+ thegraph.addedge(4,6);
+ thegraph.addedge(4,7);
+
  thegraph.draw(Form1.canvas, 4);
 end;
 
@@ -58,44 +56,15 @@ procedure TForm1.Button2Click(Sender: TObject);
 var i,j:integer;
 begin
 
-for i:=0 to 9999 do
+for i:=0 to 5000 do
     begin
     thegraph.simulation_step();
     thegraph.draw(Form1.canvas, 4);
     application.processmessages();
-    sleep(0);
-    //if (i mod 1000 = 0)  then
-    //  for j:=0 to 19 do
-    // points[j]:=mypoint.create(random()*512, random()*512);
-
+    //sleep(0);
     end;
-
 end;
 
-procedure TForm1.imgMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var i: integer;
-begin
-for i:=0 to length(thegraph.points)-1 do
-    if thegraph.points[i].distance(mypoint.create(X,Y))<5 then
-       draggin:=i;
-end;
-
-procedure TForm1.imgMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
-  );
-begin
-  if draggin>0 then
-     begin
-     thegraph.points[draggin].x :=x;
-     thegraph.points[draggin].y :=y;
-     end;
-end;
-
-procedure TForm1.imgMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  draggin:=-1;
-end;
 
 initialization
   {$I unit1.lrs}

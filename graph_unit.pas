@@ -13,6 +13,7 @@ type
         vertices: array of vertex;
         constructor create(oriented_graph:boolean);
         procedure addvertex();
+        procedure addedge(fromv,tov:integer);
         end;
 
 implementation
@@ -28,6 +29,11 @@ procedure graph.addvertex();
 begin
 setlength(vertices, length(vertices)+1);
 vertices[length(vertices)-1]:= vertex.create();
+end;
+
+procedure graph.addedge(fromv,tov:integer);
+begin
+vertices[fromv].addEdgeTo(vertices[tov]);
 end;
 
 end.

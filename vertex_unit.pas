@@ -5,12 +5,13 @@ unit vertex_unit;
 interface
 
 uses
-  Classes, SysUtils, mypointunit;
+  Classes, SysUtils;
 
 type
   vertex = class
         edgesTo: array of vertex;
         edgesFrom: array of vertex;
+        mypoint: pointer;
         procedure addEdgeTo(destination: vertex);
         procedure addEdgeFrom(source: vertex);
 
