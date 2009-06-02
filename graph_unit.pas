@@ -14,6 +14,7 @@ type
         constructor create(oriented_graph:boolean);
         procedure addvertex();
         procedure addedge(fromv,tov:integer);
+        destructor destroy();
         end;
 
 implementation
@@ -23,6 +24,15 @@ constructor graph.create(oriented_graph: boolean);
 begin
 setlength(vertices, 0);
 oriented:=oriented_graph;
+end;
+
+
+destructor graph.destroy();
+var i:integer;
+begin
+for i:=0 to length(vertices)-1 do
+    vertices[i].Free();
+setlength(vertices, 0);
 end;
 
 procedure graph.addvertex();

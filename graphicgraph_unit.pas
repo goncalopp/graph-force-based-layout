@@ -5,7 +5,7 @@ unit graphicgraph_unit;
 interface
 
 uses
-  Classes, SysUtils, graph_unit, mypointUnit, Graphics;
+  Classes, SysUtils, graph_unit, vertex_unit, mypointUnit, Graphics;
 
 type
   graphicgraph = class(graph)
@@ -16,7 +16,7 @@ type
         procedure draw(thecanvas: TCanvas; vertexsize: integer);
         procedure drawVertex(thecanvas: TCanvas; vertexsize: integer; vertexindex: integer);
         procedure drawVertexEdges(thecanvas: TCanvas; vertexindex: integer);
-        procedure simulation_step();
+        procedure simulation_step(attraction, acceleration:double);
         end;
 
 
@@ -77,24 +77,38 @@ for i:=0 to length(vertices[vertexindex].edgesTo) -1 do
 end;
 
 
-procedure graphicgraph.simulation_step();
-var i,j:integer; tmpx,tmpy: double; p1,p2: mypoint;
+procedure graphicgraph.simulation_step(attraction,acceleration:double);
+var i,j:integer; tmpx,tmpy: double; v1,v2: vertex; p1,p2,tmppoint:mypoint;
 begin
 for i:=0 to length(points)-1 do
     begin
-    p1:=points[i];
+    v1:=vertices[i];
+    p1:=mypoint(v1.mypoint);
     tmpx:=0; tmpy:=0;
     for j:=0 to length(points)-1 do
         begin
-        p2:=points[j];
+        v2:=vertices[j];
+        p2:=mypoint(v2.mypoint);
         if p1<>p2 then
            begin
-           tmpx:=tmpx+ p1.attractionVector(p2,10*10,1.01).x;
-           tmpy:=tmpy+ p1.attractionVector(p2,10*10,1.01).y;
-           end;
+           if v1.hasEdgeTo(v2) or v2.hasEdgeTo(v1) then
+              begin
+              tmppoint:=p1.attractionVector(p2,100,attraction);
+              tmpx:=tmpx+ tmppoint.x;
+              tmpy:=tmpy+ tmppoint.y;
+              tmppoint.free();
+              end
+           else
+               begin
+               tmppoint:=p1.attractionVector(p2,200,attraction);
+               tmpx:=tmpx+ tmppoint.x;
+               tmpy:=tmpy+ tmppoint.y;
+               tmppoint.free();
+               end;
+           end
         end;
-    p1.vx:=p1.vx*0.8+tmpx/(length(points)-1 );
-    p1.vy:=p1.vy*0.8+tmpy/(length(points)-1 );
+    p1.vx:=p1.vx*acceleration+tmpx/(length(points)-1 );
+    p1.vy:=p1.vy*acceleration+tmpy/(length(points)-1 );
     end;
 
 for i:=0 to length(points)-1 do
@@ -106,4 +120,4 @@ for i:=0 to length(points)-1 do
 end;
 
 end.
-
+var i,j:integer; tmpx,tmpy: double; v1,v2: vertex; p1,p2:mypoint;
