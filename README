@@ -1,0 +1,9 @@
+This is an Object Pascal (Delphi) implementation of a custom n-dimentional 
+graph layout algorithm, heavily inspired by the Kamada-Kawai model.
+
+Currently, the implementation is limited to representing 2D non-weighted
+graphs, but the algorithm can be trivially adapted to N-dimensions and
+weighted graphs.
+
+Use Lazarus and Free Pascal to compile
+http://www.lazarus.freepascal.org
